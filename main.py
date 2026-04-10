@@ -83,7 +83,7 @@ if not os.path.exists(STOCK_FILE):
     ])
     df_stock_init.to_csv(STOCK_FILE, index=False)
 
-# --- BLOQUE CORPORATIVO "SOBRE AGVAC" ---
+# --- BLOQUE CORPORATIVO RESTAURADO ---
 SOBRE_AGVAC_HTML = f"""
 <div class="about-box">
     <div class="logo-container-about">
@@ -91,8 +91,13 @@ SOBRE_AGVAC_HTML = f"""
         <img src="{URL_LOGO_MRG}" width="70">
     </div>
     <h3 style="text-align:center; margin-top:0;">Sobre AGVAC</h3>
-    <p><b>AGVAC</b> es una solución tecnológica diseñada específicamente para optimizar la gestión de inventarios de vacunas en entornos sanitarios.</p>
-    <p>Desarrollado por <b>MRG Healthcare Applications</b>.</p>
+    <p><b>AGVAC</b> es una solución tecnológica diseñada específicamente para optimizar la gestión de inventarios de vacunas en entornos sanitarios. Nuestra misión es simplificar el flujo de trabajo del personal sanitario, automatizando la carga administrativa y minimizando el riesgo de errores de stock.</p>
+    <p>Esta aplicación ha sido diseñada y desarrollada por <b>MRG Healthcare Applications</b>, un grupo multidisciplinar de trabajadores del sector de la salud e informática dedicados al diseño de nuevas herramientas digitales que den respuesta a los desafíos reales de la sanidad moderna.</p>
+    <ul>
+        <li><b>Registro Automatizado:</b> Trazabilidad de dosis administradas en gestión de stock.</li>
+        <li><b>Gestión de Stock:</b> Alertas inteligentes basadas en umbrales críticos.</li>
+        <li><b>Análisis:</b> Visualización de datos para la planificación estratégica.</li>
+    </ul>
     <hr>
     <p style="text-align:center; font-size: 13px;"><b>¿Dudas o soporte técnico?</b><br>
     <a href="mailto:{EMAIL_CORPORATIVO}" class="contact-link">📧 {EMAIL_CORPORATIVO}</a></p>
@@ -115,9 +120,9 @@ def login():
                 st.rerun()
             else: st.error("Error de credenciales")
         
-        # Bloque de información y contacto en el login
+        # Bloque de información restaurado en el login
         st.markdown(SOBRE_AGVAC_HTML, unsafe_allow_html=True)
-        st.markdown("<div class='login-footer-version'>MRGAGVAC2026.1.7.3 | Beta AGVAC</div>", unsafe_allow_html=True)
+        st.markdown("<div class='login-footer-version'>MRGAGVAC2026.1.7.4 | Beta AGVAC</div>", unsafe_allow_html=True)
 
 if not st.session_state.autenticado:
     login()
@@ -243,4 +248,4 @@ with tab_conf:
                 pd.concat([df_st, nueva_v], ignore_index=True).to_csv(STOCK_FILE, index=False)
                 st.session_state.lista_vacunas[n_v] = n_c; st.rerun()
 
-st.markdown(f'<div class="footer">MRGAGVAC2026.1.7.3 | Beta AGVAC | Contacto: {EMAIL_CORPORATIVO}</div>', unsafe_allow_html=True)
+st.markdown(f'<div class="footer">MRGAGVAC2026.1.7.4 | Beta AGVAC | Contacto: {EMAIL_CORPORATIVO}</div>', unsafe_allow_html=True)
