@@ -89,7 +89,7 @@ SOBRE_AGVAC_HTML = f"""
     <p>Esta aplicación ha sido diseñada y desarrollada por <b>MRG Healthcare Applications</b>, un grupo multidisciplinar de trabajadores del sector de la salud e informática dedicados al diseño de nuevas herramientas digitales que den respuesta a los desafíos reales de la sanidad moderna.</p>
     <ul>
         <li><b>Registro Automatizado:</b> Trazabilidad de dosis administradas en gestión de stock.</li>
-        <li><b>Gestión de Stock:</b> Alertas inteligentes basadas en umbrales críticos de stock.</li>
+        <li><b>Gestión de Stock:</b> Alertas inteligentes basadas en umbrales críticos.</li>
         <li><b>Análisis:</b> Visualización de datos para la planificación estratégica.</li>
     </ul>
 </div>
