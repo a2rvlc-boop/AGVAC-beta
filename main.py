@@ -14,7 +14,7 @@ st.markdown("""
     .stButton>button { background-color: #005b7f; color: white; border-radius: 8px; font-weight: bold; width: 100%; }
     .stButton>button:hover { background-color: #00425c; color: white; }
     h1, h2, h3 { color: #004561; font-family: 'Arial', sans-serif; }
-    .footer { position: fixed; bottom: 0; left: 0; width: 100%; text-align: center; color: #9e9e9e; font-size: 11px; padding-bottom: 10px; background-color: white; width: 100%; }
+    .footer { position: fixed; bottom: 0; left: 0; width: 100%; text-align: center; color: #9e9e9e; font-size: 11px; padding-bottom: 10px; background-color: white; width: 100%; z-index: 100; }
     .login-footer-version { text-align: center; color: #9e9e9e; font-size: 12px; margin-top: 20px; }
     
     /* Caja corporativa Sobre AGVAC */
@@ -36,6 +36,11 @@ st.markdown("""
         align-items: center;
         margin-bottom: 15px;
     }
+    .contact-link {
+        color: #005b7f;
+        text-decoration: none;
+        font-weight: bold;
+    }
     </style>
     """, unsafe_allow_html=True)
 
@@ -44,6 +49,7 @@ DB_FILE = "datos_agvac.csv"
 STOCK_FILE = "stock_agvac.csv"
 URL_LOGO_MRG = "https://raw.githubusercontent.com/a2rvlc-boop/AGVAC/refs/heads/main/logomrg.png"
 URL_LOGO_AGVAC = "https://raw.githubusercontent.com/a2rvlc-boop/AGVAC/refs/heads/main/logo_agvac.png"
+EMAIL_CORPORATIVO = "agvac@mrg.es"
 
 # Mínimos críticos por defecto
 MINIMOS_DEFAULT = {
@@ -85,13 +91,11 @@ SOBRE_AGVAC_HTML = f"""
         <img src="{URL_LOGO_MRG}" width="70">
     </div>
     <h3 style="text-align:center; margin-top:0;">Sobre AGVAC</h3>
-    <p><b>AGVAC</b> es una solución tecnológica diseñada específicamente para optimizar la gestión de inventarios de vacunas en entornos sanitarios. Nuestra misión es simplificar el flujo de trabajo del personal sanitario, automatizando la carga administrativa y minimizando el riesgo de errores de stock.</p>
-    <p>Esta aplicación ha sido diseñada y desarrollada por <b>MRG Healthcare Applications</b>, un grupo multidisciplinar de trabajadores del sector de la salud e informática dedicados al diseño de nuevas herramientas digitales que den respuesta a los desafíos reales de la sanidad moderna.</p>
-    <ul>
-        <li><b>Registro Automatizado:</b> Trazabilidad de dosis administradas en gestión de stock.</li>
-        <li><b>Gestión de Stock:</b> Alertas inteligentes basadas en umbrales críticos.</li>
-        <li><b>Análisis:</b> Visualización de datos para la planificación estratégica.</li>
-    </ul>
+    <p><b>AGVAC</b> es una solución tecnológica diseñada específicamente para optimizar la gestión de inventarios de vacunas en entornos sanitarios.</p>
+    <p>Desarrollado por <b>MRG Healthcare Applications</b>.</p>
+    <hr>
+    <p style="text-align:center; font-size: 13px;"><b>¿Dudas o soporte técnico?</b><br>
+    <a href="mailto:{EMAIL_CORPORATIVO}" class="contact-link">📧 {EMAIL_CORPORATIVO}</a></p>
 </div>
 """
 
@@ -111,9 +115,9 @@ def login():
                 st.rerun()
             else: st.error("Error de credenciales")
         
-        # Mostrar descripción profesional en el login
+        # Bloque de información y contacto en el login
         st.markdown(SOBRE_AGVAC_HTML, unsafe_allow_html=True)
-        st.markdown("<div class='login-footer-version'>MRGAGVAC2026.1.7.2 | Beta AGVAC</div>", unsafe_allow_html=True)
+        st.markdown("<div class='login-footer-version'>MRGAGVAC2026.1.7.3 | Beta AGVAC</div>", unsafe_allow_html=True)
 
 if not st.session_state.autenticado:
     login()
@@ -128,8 +132,13 @@ if st.sidebar.button("🔒 Cerrar Sesión"):
     st.rerun()
 
 # Información corporativa en Sidebar
-with st.sidebar.expander("ℹ️ Información AGVAC"):
+with st.sidebar.expander("ℹ️ Información y Contacto"):
     st.markdown(SOBRE_AGVAC_HTML, unsafe_allow_html=True)
+
+# Botón de contacto directo en Sidebar
+st.sidebar.divider()
+st.sidebar.markdown("### 📞 Soporte MRG")
+st.sidebar.link_button("📩 Contactar por Email", f"mailto:{EMAIL_CORPORATIVO}")
 
 st.sidebar.divider()
 df_alertas = pd.read_csv(STOCK_FILE)
@@ -139,7 +148,7 @@ if not alertas.empty:
     for _, fila in alertas.iterrows():
         st.sidebar.warning(f"{fila['Vacuna']}: {int(fila['Cantidad'])} unidades")
 
-# Cabecera principal con logos
+# Cabecera principal
 col_izq, col_centro, col_der = st.columns([1, 4, 1])
 with col_izq: st.image(URL_LOGO_MRG)
 with col_centro: st.markdown("<h1 style='text-align: center; font-size: 50px;'>AGVAC</h1>", unsafe_allow_html=True)
@@ -234,4 +243,4 @@ with tab_conf:
                 pd.concat([df_st, nueva_v], ignore_index=True).to_csv(STOCK_FILE, index=False)
                 st.session_state.lista_vacunas[n_v] = n_c; st.rerun()
 
-st.markdown(f'<div class="footer">MRGAGVAC2026.1.7.2 | Beta AGVAC</div>', unsafe_allow_html=True)
+st.markdown(f'<div class="footer">MRGAGVAC2026.1.7.3 | Beta AGVAC | Contacto: {EMAIL_CORPORATIVO}</div>', unsafe_allow_html=True)
