@@ -14,42 +14,14 @@ st.markdown("""
     .stButton>button { background-color: #005b7f; color: white; border-radius: 8px; font-weight: bold; width: 100%; }
     .stButton>button:hover { background-color: #00425c; color: white; }
     h1, h2, h3 { color: #004561; font-family: 'Arial', sans-serif; }
-    .footer { position: fixed; bottom: 0; left: 0; width: 100%; text-align: center; color: #9e9e9e; font-size: 11px; padding-bottom: 10px; background-color: white; width: 100%; z-index: 100; }
-    .login-footer-version { text-align: center; color: #9e9e9e; font-size: 12px; margin-top: 20px; }
-    
-    /* Caja corporativa Sobre AGVAC */
-    .about-box { 
-        background-color: #f8f9fa; 
-        padding: 25px; 
-        border-radius: 12px; 
-        border-left: 6px solid #005b7f;
-        margin-top: 20px;
-        font-size: 14px;
-        color: #333;
-        line-height: 1.6;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    }
-    .logo-container-about {
-        display: flex;
-        justify-content: center;
-        gap: 30px;
-        align-items: center;
-        margin-bottom: 15px;
-    }
-    .contact-link {
-        color: #005b7f;
-        text-decoration: none;
-        font-weight: bold;
-    }
+    .footer { position: fixed; bottom: 0; left: 0; width: 100%; text-align: center; color: #9e9e9e; font-size: 11px; padding-bottom: 10px; }
+    .login-footer-version { position: fixed; bottom: 20px; left: 0; width: 100%; text-align: center; color: #9e9e9e; font-size: 12px; }
     </style>
     """, unsafe_allow_html=True)
 
 # --- 2. ARCHIVOS Y DATOS INICIALES ---
 DB_FILE = "datos_agvac.csv"
 STOCK_FILE = "stock_agvac.csv"
-URL_LOGO_MRG = "https://raw.githubusercontent.com/a2rvlc-boop/AGVAC/refs/heads/main/logomrg.png"
-URL_LOGO_AGVAC = "https://raw.githubusercontent.com/a2rvlc-boop/AGVAC/refs/heads/main/logo_agvac.png"
-EMAIL_CORPORATIVO = "agvac@mrg.es"
 
 # Mínimos críticos por defecto
 MINIMOS_DEFAULT = {
@@ -83,46 +55,21 @@ if not os.path.exists(STOCK_FILE):
     ])
     df_stock_init.to_csv(STOCK_FILE, index=False)
 
-# --- BLOQUE CORPORATIVO RESTAURADO ---
-SOBRE_AGVAC_HTML = f"""
-<div class="about-box">
-    <div class="logo-container-about">
-        <img src="{URL_LOGO_AGVAC}" width="70">
-        <img src="{URL_LOGO_MRG}" width="70">
-    </div>
-    <h3 style="text-align:center; margin-top:0;">Sobre AGVAC</h3>
-    <p><b>AGVAC</b> es una solución tecnológica diseñada específicamente para optimizar la gestión de inventarios de vacunas en entornos sanitarios. Nuestra misión es simplificar el flujo de trabajo del personal sanitario, automatizando la carga administrativa y minimizando el riesgo de errores de stock.</p>
-    <p>Esta aplicación ha sido diseñada y desarrollada por <b>MRG Healthcare Applications</b>, un grupo multidisciplinar de trabajadores del sector de la salud e informática dedicados al diseño de nuevas herramientas digitales que den respuesta a los desafíos reales de la sanidad moderna.</p>
-    <ul>
-        <li><b>Registro Automatizado:</b> Trazabilidad de dosis administradas en gestión de stock.</li>
-        <li><b>Gestión de Stock:</b> Alertas inteligentes basadas en umbrales críticos.</li>
-        <li><b>Análisis:</b> Visualización de datos para la planificación estratégica.</li>
-    </ul>
-    <hr>
-    <p style="text-align:center; font-size: 13px;"><b>¿Dudas o soporte técnico?</b><br>
-    <a href="mailto:{EMAIL_CORPORATIVO}" class="contact-link">📧 {EMAIL_CORPORATIVO}</a></p>
-</div>
-"""
-
 # --- 3. CONTROL DE ACCESO ---
 if 'autenticado' not in st.session_state: st.session_state.autenticado = False
 
 def login():
-    col_l1, col_l2, col_l3 = st.columns([1, 2, 1])
-    with col_l2:
-        st.markdown(f'<div style="text-align:center; margin-top:50px;"><img src="{URL_LOGO_AGVAC}" width="180"></div>', unsafe_allow_html=True)
-        st.markdown("<h2 style='text-align:center;'>Acceso AGVAC</h2>", unsafe_allow_html=True)
-        usuario = st.text_input("Usuario")
-        password = st.text_input("Contraseña", type="password")
-        if st.button("Entrar"):
-            if usuario == "agvac" and password == "agvac":
-                st.session_state.autenticado = True
-                st.rerun()
-            else: st.error("Error de credenciales")
-        
-        # Bloque de información restaurado en el login
-        st.markdown(SOBRE_AGVAC_HTML, unsafe_allow_html=True)
-        st.markdown("<div class='login-footer-version'>MRGAGVAC2026.1.7.4 | Beta AGVAC</div>", unsafe_allow_html=True)
+    URL_LOGO_LOGIN = "https://raw.githubusercontent.com/a2rvlc-boop/AGVAC/refs/heads/main/logo_agvac.png"
+    st.markdown(f'<div style="text-align:center; margin-top:50px;"><img src="{URL_LOGO_LOGIN}" width="180"></div>', unsafe_allow_html=True)
+    st.markdown("<h2 style='text-align:center;'>Acceso AGVAC</h2>", unsafe_allow_html=True)
+    usuario = st.text_input("Usuario")
+    password = st.text_input("Contraseña", type="password")
+    if st.button("Entrar"):
+        if usuario == "agvac" and password == "agvac":
+            st.session_state.autenticado = True
+            st.rerun()
+        else: st.error("Error de credenciales")
+    st.markdown("<div class='login-footer-version'>MRGAGVAC2026.1.6.1 | AGVAC</div>", unsafe_allow_html=True)
 
 if not st.session_state.autenticado:
     login()
@@ -131,19 +78,10 @@ if not st.session_state.autenticado:
 # --- 4. INTERFAZ PRINCIPAL ---
 if 'cesta' not in st.session_state: st.session_state.cesta = []
 
-# Sidebar
-if st.sidebar.button("🔒 Cerrar Sesión"):
+# Sidebar con alertas de Stock
+if st.sidebar.button("Cerrar Sesión"):
     st.session_state.autenticado = False
     st.rerun()
-
-# Información corporativa en Sidebar
-with st.sidebar.expander("ℹ️ Información y Contacto"):
-    st.markdown(SOBRE_AGVAC_HTML, unsafe_allow_html=True)
-
-# Botón de contacto directo en Sidebar
-st.sidebar.divider()
-st.sidebar.markdown("### 📞 Soporte MRG")
-st.sidebar.link_button("📩 Contactar por Email", f"mailto:{EMAIL_CORPORATIVO}")
 
 st.sidebar.divider()
 df_alertas = pd.read_csv(STOCK_FILE)
@@ -153,11 +91,11 @@ if not alertas.empty:
     for _, fila in alertas.iterrows():
         st.sidebar.warning(f"{fila['Vacuna']}: {int(fila['Cantidad'])} unidades")
 
-# Cabecera principal
+# Cabecera
 col_izq, col_centro, col_der = st.columns([1, 4, 1])
-with col_izq: st.image(URL_LOGO_MRG)
+with col_izq: st.image("https://raw.githubusercontent.com/a2rvlc-boop/AGVAC/refs/heads/main/logomrg.png")
 with col_centro: st.markdown("<h1 style='text-align: center; font-size: 50px;'>AGVAC</h1>", unsafe_allow_html=True)
-with col_der: st.image(URL_LOGO_AGVAC)
+with col_der: st.image("https://raw.githubusercontent.com/a2rvlc-boop/AGVAC/refs/heads/main/logo_agvac.png")
 
 tab_reg, tab_hist, tab_graf, tab_conf = st.tabs(["📝 Registro", "📋 Historial", "📊 Estadísticas", "⚙️ Stock y Catálogo"])
 
@@ -166,11 +104,38 @@ with tab_reg:
     col_s, col_c = st.columns(2)
     with col_s:
         st.subheader("🔍 Seleccionar Vacuna")
-        seleccion = st.selectbox("Vacuna:", [""] + list(st.session_state.lista_vacunas.keys()))
-        if st.button("➕ Añadir a la lista"):
-            if seleccion:
-                st.session_state.cesta.append(seleccion)
-                st.rerun()
+        
+        # Opciones de Registro Manual o QR
+        modo_registro = st.radio("Método de registro:", ["Selección Manual", "📷 Escanear Código QR"])
+        
+        if modo_registro == "Selección Manual":
+            seleccion = st.selectbox("Vacuna:", [""] + list(st.session_state.lista_vacunas.keys()))
+            if st.button("➕ Añadir a la cesta"):
+                if seleccion:
+                    st.session_state.cesta.append(seleccion)
+                    st.rerun()
+        else:
+            st.info("Apunta con la cámara de tu teléfono al código QR de la vacuna (debe contener exactamente el nombre de la vacuna registrado en el sistema).")
+            
+            # Intentamos importar el componente de QR si está instalado, de lo contrario sugerimos la instalación
+            try:
+                from streamlit_qrcode_scanner import qrcode_scanner
+                qr_code = qrcode_scanner(key='qr_scanner')
+                if qr_code:
+                    if qr_code in st.session_state.lista_vacunas.keys():
+                        if qr_code not in st.session_state.cesta:
+                            st.session_state.cesta.append(qr_code)
+                            st.success(f"¡Vacuna detectada y añadida: {qr_code}!")
+                            st.rerun()
+                    else:
+                        st.error(f"El código QR leído ('{qr_code}') no coincide con ninguna vacuna del catálogo.")
+            except ImportError:
+                st.warning("⚠️ Para usar el escáner QR, por favor instala la librería ejecutando: `pip install streamlit-qrcode-scanner`")
+                # Alternativa nativa usando subida de imagen por si acaso
+                foto_qr = st.camera_input("Tomar foto con código QR")
+                if foto_qr is not None:
+                    st.info("Nota: La decodificación automática de imagen requiere la librería auxiliar. Asegúrate de instalar `streamlit-qrcode-scanner`.")
+
     with col_c:
         st.subheader("📦 Cesta de hoy")
         if st.session_state.cesta:
@@ -181,8 +146,10 @@ with tab_reg:
                 df_stock = pd.read_csv(STOCK_FILE)
                 ahora = datetime.now()
                 for item in st.session_state.cesta:
+                    # Guardar Historial
                     nueva = {"Fecha": ahora.strftime("%Y-%m-%d %H:%M"), "Vacuna": item, "Semana": ahora.strftime("%U-%Y"), "Mes": ahora.strftime("%m-%Y"), "Año": ahora.strftime("%Y")}
                     df_hist = pd.concat([df_hist, pd.DataFrame([nueva])], ignore_index=True)
+                    # Descontar Stock
                     if item in df_stock['Vacuna'].values:
                         idx = df_stock.index[df_stock['Vacuna'] == item].tolist()[0]
                         df_stock.at[idx, 'Cantidad'] -= 1
@@ -190,62 +157,87 @@ with tab_reg:
                 df_hist.to_csv(DB_FILE, index=False)
                 df_stock.to_csv(STOCK_FILE, index=False)
                 st.session_state.cesta = []
-                st.success("¡Registrado!")
+                st.success("¡Registrado y Stock descontado!")
                 st.rerun()
         else: st.info("No hay vacunas en la cesta")
 
-# --- TAB 2: HISTORIAL ---
+# --- TAB 2: HISTORIAL (ELIMINACIÓN + DEVOLUCIÓN STOCK) ---
 with tab_hist:
     st.subheader("📋 Gestión de Registros")
     df_ver = pd.read_csv(DB_FILE)
     if not df_ver.empty:
         df_display = df_ver.iloc[::-1].copy()
-        id_eliminar = st.selectbox("Eliminar registro (devuelve dosis):", 
-                                 options=df_display.index, 
-                                 format_func=lambda x: f"{df_display.loc[x, 'Fecha']} | {df_display.loc[x, 'Vacuna']}")
+        id_eliminar = st.selectbox("Seleccionar registro para eliminar (devuelve 1 dosis al stock):", 
+                                   options=df_display.index, 
+                                   format_func=lambda x: f"{df_display.loc[x, 'Fecha']} | {df_display.loc[x, 'Vacuna']}")
         
-        if st.button("🗑️ Eliminar y Devolver Dosis"):
+        if st.button("🗑️ Eliminar Registro y Devolver Dosis"):
             vacuna_retorno = df_ver.loc[id_eliminar, 'Vacuna']
             df_stock_ret = pd.read_csv(STOCK_FILE)
             if vacuna_retorno in df_stock_ret['Vacuna'].values:
                 idx_s = df_stock_ret.index[df_stock_ret['Vacuna'] == vacuna_retorno].tolist()[0]
                 df_stock_ret.at[idx_s, 'Cantidad'] += 1
                 df_stock_ret.to_csv(STOCK_FILE, index=False)
-            df_ver.drop(id_eliminar).to_csv(DB_FILE, index=False)
-            st.success("Registro actualizado.")
+            
+            df_final = df_ver.drop(id_eliminar)
+            df_final.to_csv(DB_FILE, index=False)
+            st.success(f"Dosis de {vacuna_retorno} devuelta al inventario.")
             st.rerun()
+            
         st.divider()
         st.dataframe(df_display, use_container_width=True)
+    else: st.info("El historial está vacío.")
 
 # --- TAB 3: ESTADÍSTICAS ---
 with tab_graf:
+    st.subheader("📊 Resumen de Actividad")
     df_g = pd.read_csv(DB_FILE)
     if not df_g.empty:
         c = df_g['Vacuna'].value_counts().reset_index()
-        fig = px.pie(c, values='count', names='Vacuna', color='Vacuna', color_discrete_map=st.session_state.lista_vacunas, hole=0.3)
+        fig = px.pie(c, values='count', names='Vacuna', color='Vacuna', 
+                     color_discrete_map=st.session_state.lista_vacunas, hole=0.3)
         st.plotly_chart(fig, use_container_width=True)
+    else: st.info("Sin datos suficientes.")
 
-# --- TAB 4: STOCK ---
+# --- TAB 4: GESTIÓN DE STOCK Y CATÁLOGO ---
 with tab_conf:
+    st.subheader("📦 Inventario en Tiempo Real")
     df_st = pd.read_csv(STOCK_FILE)
     st.dataframe(df_st, use_container_width=True)
+    
     col_st1, col_st2 = st.columns(2)
     with col_st1:
-        st.write("### Ajustar Stock")
-        v_a = st.selectbox("Elegir:", df_st['Vacuna'])
-        n_a = st.number_input("Cantidad (+/-):", step=1)
-        if st.button("Actualizar"):
+        st.write("### ➕ / ➖ Ajustar Cantidades")
+        v_a = st.selectbox("Elegir Vacuna:", df_st['Vacuna'])
+        n_a = st.number_input("Cantidad a modificar (ej: 10 para añadir, -10 para quitar):", step=1)
+        if st.button("Actualizar Inventario"):
             idx_a = df_st.index[df_st['Vacuna'] == v_a].tolist()[0]
             df_st.at[idx_a, 'Cantidad'] += n_a
-            df_st.to_csv(STOCK_FILE, index=False); st.rerun()
+            df_st.to_csv(STOCK_FILE, index=False)
+            st.rerun()
+            
     with col_st2:
-        st.write("### Nueva Vacuna")
-        n_v = st.text_input("Nombre:")
-        n_c = st.color_picker("Color:", "#005b7f")
-        if st.button("Añadir"):
+        st.write("### 🆕 Nueva Vacuna")
+        n_v = st.text_input("Nombre de la vacuna:")
+        n_c = st.color_picker("Color para gráficas:", "#005b7f")
+        n_m = st.number_input("Mínimo para alerta:", value=5)
+        if st.button("Registrar Vacuna Nueva"):
             if n_v:
-                nueva_v = pd.DataFrame([{"Vacuna": n_v, "Cantidad": 25, "Minimo": 5}])
-                pd.concat([df_st, nueva_v], ignore_index=True).to_csv(STOCK_FILE, index=False)
-                st.session_state.lista_vacunas[n_v] = n_c; st.rerun()
+                nueva_v = pd.DataFrame([{"Vacuna": n_v, "Cantidad": 25, "Minimo": n_m}])
+                df_st = pd.concat([df_st, nueva_v], ignore_index=True)
+                df_st.to_csv(STOCK_FILE, index=False)
+                st.session_state.lista_vacunas[n_v] = n_c
+                st.success(f"{n_v} añadida con éxito.")
+                st.rerun()
+                
+    st.divider()
+    st.write("### 🗑️ Eliminar Vacuna del Sistema")
+    v_borrar = st.selectbox("Vacuna a borrar por completo:", list(st.session_state.lista_vacunas.keys()))
+    if st.button("ELIMINAR DEFINITIVAMENTE"):
+        df_st = df_st[df_st['Vacuna'] != v_borrar]
+        df_st.to_csv(STOCK_FILE, index=False)
+        if v_borrar in st.session_state.lista_vacunas:
+            del st.session_state.lista_vacunas[v_borrar]
+        st.rerun()
 
-st.markdown(f'<div class="footer">MRGAGVAC2026.1.7.4 | Beta AGVAC | Contacto: {EMAIL_CORPORATIVO}</div>', unsafe_allow_html=True)
+st.markdown('<div class="footer">MRGAGVAC2026.1.6.1 | Sistema Privado AGVAC</div>', unsafe_allow_html=True)
